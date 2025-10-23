@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>No-Show Predictor</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Veterinary Clinic No-Show Predictor</h1>
+        <p>Enter the appointment details to predict the no-show risk.</p>
+
+        <form id="prediction-form">
+            <div class="form-group">
+                <label for="appointment_date">Appointment Date</label>
+                <input type="date" id="appointment_date" name="appointment_date" required>
+            </div>
+
+            <div class="form-group">
+                <label for="appointment_time">Appointment Time</label>
+                <input type="time" id="appointment_time" name="appointment_time" required>
+            </div>
+
+            <div class="form-group">
+                <label for="past_noshow_rate">Patient's Past No-Show Rate (%)</label>
+                <input type="number" id="past_noshow_rate" name="past_noshow_rate" min="0" max="100" placeholder="Enter 0 for new patients" required>
+            </div>
+
+            <div class="form-group">
+                <label for="days_since_last_appt">Days Since Patient's Last Appointment</label>
+                <input type="number" id="days_since_last_appt" name="days_since_last_appt" min="0" placeholder="Enter 0 for new patients" required>
+            </div>
+
+            <div class="form-group">
+                <label for="duration_min">Appointment Duration (minutes)</label>
+                <input type="number" id="duration_min" name="duration_min" min="5" value="15" required>
+            </div>
+
+            <div class="form-group">
+                <label for="appointment_type">Appointment Type</label>
+                <select id="appointment_type" name="appointment_type">
+                    <option value="Examination">Examination</option>
+                    <option value="Professional Services">Professional Services</option>
+                    <option value="Surgery">Surgery</option>
+                    <option value="Tech appts">Technician Appointment</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="doctor">Doctor / Resource</label>
+                <select id="doctor" name="doctor">
+                    <option value="Dr. Smith">Dr. Smith</option>
+                    <option value="Dr. Jones">Dr. Jones</option>
+                    <option value="Dr. Miller">Dr. Miller</option>
+                </select>
+            </div>
+
+            <button type="submit">Predict No-Show Risk</button>
+        </form>
+
+        <div id="result-container" class="hidden">
+            <h2>Prediction Result</h2>
+            <p id="prediction-text"></p>
+            <p id="probability-text"></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
