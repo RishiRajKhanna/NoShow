@@ -76,8 +76,8 @@ def predict_no_show(appointment: Appointment):
 
     # Hardcoded assumptions for simplicity
     # In a real app, this would come from a database
-    resource_rates = {"Dr. Smith": 0.15, "Dr. Jones": 0.18, "Dr. Miller": 0.12}
-    practice_noshow_rate = 0.1 # Clinic-wide average
+    resource_rates = {"Dr. Smith": 0.35, "Dr. Jones": 0.40, "Dr. Miller": 0.30}
+    practice_noshow_rate = 0.3 # Clinic-wide average
 
     # Create the record dictionary for the model
     record = {
@@ -107,9 +107,9 @@ def predict_no_show(appointment: Appointment):
     df = df.reindex(columns=model_columns, fill_value=0)
 
     # Scale numerical features
-    features_to_scale = [f for f in numerical_features if f in df.columns]
-    if features_to_scale:
-        df[features_to_scale] = scaler.transform(df[features_to_scale])
+    # The scaler expects the columns in a specific order, so we must provide them in that order.
+    if numerical_features:
+        df[numerical_features] = scaler.transform(df[numerical_features])
 
     # Make prediction
     probability = model.predict_proba(df)[0]

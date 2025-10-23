@@ -1,4 +1,3 @@
-
 # Appointment No-Show Prediction Project
 
 ## 1. Objective
@@ -117,3 +116,49 @@ python model_training.py
 python model_training_rf.py
 ```
 
+### 6. Prediction Tool (Frontend & Backend)
+
+To make the no-show prediction model accessible, a web-based tool has been developed, consisting of a FastAPI backend and a simple HTML/CSS/JavaScript frontend.
+
+#### 6.1 Backend API (`api/main.py`)
+
+The backend is a FastAPI application that serves as the prediction engine.
+
+-   **Purpose**: Receives appointment details from the frontend, preprocesses the data, uses the trained Random Forest model to make a no-show prediction, and returns the result.
+-   **Key Logic**:
+    -   Loads the `noshow_model_rf.joblib` (Random Forest model), `scaler.joblib` (feature scaler), and `model_columns.joblib` (list of expected features) from the `output/` directory.
+    -   Exposes a `/predict` endpoint that accepts `POST` requests with appointment data.
+    -   Performs feature engineering (e.g., calculates `LEAD_TIME_HOURS`, `DAY_OF_WEEK`).
+    -   Applies one-hot encoding and scaling to the input data, ensuring consistency with the model's training.
+    -   Returns a prediction (`"No-Show"` or `"Show"`) and the probability of a no-show.
+-   **Dependencies**: Listed in `api/requirements.txt`.
+-   **How to Run**:
+    1.  Navigate to the `api/` directory:
+        ```bash
+        cd api
+        ```
+    2.  Install the required Python packages:
+        ```bash
+        pip install -r requirements.txt
+        ```
+    3.  Start the FastAPI server:
+        ```bash
+        python -m uvicorn main:app --host 0.0.0.0 --port 8000
+        ```
+        Leave this terminal running.
+
+#### 6.2 Frontend Web Interface (`frontend/`)
+
+The frontend provides a user-friendly interface for interacting with the prediction API.
+
+-   **Purpose**: Allows a receptionist to input appointment details and instantly receive a no-show risk prediction.
+-   **Files**:
+    -   `index.html`: The main HTML structure for the prediction form.
+    -   `script.js`: Handles form submission, sends data to the backend API, and displays the prediction results.
+    -   `style.css`: Provides styling for the web interface.
+-   **How to Run**:
+    1.  Ensure the backend API is running (as described above).
+    2.  Navigate to the `frontend/` directory in your file explorer.
+    3.  Open the `index.html` file directly in your web browser (e.g., by double-clicking it).
+
+The web interface will connect to the running backend API to fetch predictions.
