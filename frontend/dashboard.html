@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>No-Show Risk Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="container">
+            <h1>No-Show Risk Dashboard</h1>
+            <div class="controls">
+                <input type="date" id="date-picker">
+                <button id="load-data-btn">Load Data</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <section id="summary-cards" class="summary-cards-section">
+            <!-- Summary cards will be inserted here by JavaScript -->
+        </section>
+
+        <section class="appointment-list-section">
+            <table class="appointment-table">
+                <thead>
+                    <tr>
+                        <th>Appointment ID</th>
+                        <th>Patient Name</th>
+                        <th>Time</th>
+                        <th>Reason</th>
+                        <th>Risk Factors</th>
+                        <th>Prediction</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="appointment-table-body">
+                    <!-- Appointment rows will be inserted here by JavaScript -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>

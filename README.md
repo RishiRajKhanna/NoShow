@@ -100,7 +100,7 @@ The **Random Forest model is the recommended model**. While it catches a smaller
 
 ## 5. How to Run the Project
 
-To replicate the analysis, run the scripts from the command line in the following order:
+To replicate the analysis and modeling, run the scripts from the command line in the following order:
 
 ```bash
 # 1. Initial data processing
@@ -116,23 +116,31 @@ python model_training.py
 python model_training_rf.py
 ```
 
-### 6. Prediction Tool (Frontend & Backend)
+---
 
-To make the no-show prediction model accessible, a web-based tool has been developed, consisting of a FastAPI backend and a simple HTML/CSS/JavaScript frontend.
+## 6. Prediction Tools
 
-#### 6.1 Backend API (`api/main.py`)
+This project provides two ways to interact with the prediction model.
 
-The backend is a FastAPI application that serves as the prediction engine.
+### 6.1 No-Show Risk Dashboard (Recommended)
 
--   **Purpose**: Receives appointment details from the frontend, preprocesses the data, uses the trained Random Forest model to make a no-show prediction, and returns the result.
--   **Key Logic**:
-    -   Loads the `noshow_model_rf.joblib` (Random Forest model), `scaler.joblib` (feature scaler), and `model_columns.joblib` (list of expected features) from the `output/` directory.
-    -   Exposes a `/predict` endpoint that accepts `POST` requests with appointment data.
-    -   Performs feature engineering (e.g., calculates `LEAD_TIME_HOURS`, `DAY_OF_WEEK`).
-    -   Applies one-hot encoding and scaling to the input data, ensuring consistency with the model's training.
-    -   Returns a prediction (`"No-Show"` or `"Show"`) and the probability of a no-show.
--   **Dependencies**: Listed in `api/requirements.txt`.
--   **How to Run**:
+This is a web-based dashboard that provides a daily overview of no-show risks.
+
+-   **Purpose**: Allows a receptionist to see all appointments for a selected date and their predicted no-show risk at a glance.
+-   **Files**:
+    -   `frontend/dashboard.html`
+    -   `frontend/dashboard.css`
+    -   `frontend/dashboard.js`
+
+#### How to Run the Dashboard:
+
+1.  **IMPORTANT - Data Dependency**: Before starting, you must generate the necessary data file for the API. Run the data processing scripts in order:
+    ```bash
+    python analysis.py
+    python feature_engineering_eda.py
+    ```
+
+2.  **Start the Backend API**: The dashboard requires the FastAPI backend to be running.
     1.  Navigate to the `api/` directory:
         ```bash
         cd api
@@ -147,18 +155,19 @@ The backend is a FastAPI application that serves as the prediction engine.
         ```
         Leave this terminal running.
 
-#### 6.2 Frontend Web Interface (`frontend/`)
+3.  **Open the Dashboard**:
+    1.  Navigate to the `frontend/` directory in your file explorer.
+    2.  Open the `dashboard.html` file directly in your web browser (e.g., by double-clicking it).
+    3.  The dashboard will automatically load the data for the current day. Use the date picker to view other dates.
 
-The frontend provides a user-friendly interface for interacting with the prediction API.
+### 6.2 Single Prediction Tool (Legacy)
 
--   **Purpose**: Allows a receptionist to input appointment details and instantly receive a no-show risk prediction.
+This is the original, simpler tool for predicting the no-show risk for a single appointment.
+
+-   **Purpose**: Allows a user to manually input the details of a single appointment to get a prediction.
 -   **Files**:
-    -   `index.html`: The main HTML structure for the prediction form.
-    -   `script.js`: Handles form submission, sends data to the backend API, and displays the prediction results.
-    -   `style.css`: Provides styling for the web interface.
--   **How to Run**:
-    1.  Ensure the backend API is running (as described above).
-    2.  Navigate to the `frontend/` directory in your file explorer.
-    3.  Open the `index.html` file directly in your web browser (e.g., by double-clicking it).
+    -   `frontend/index.html`
+    -   `frontend/script.js`
+    -   `frontend/style.css`
 
-The web interface will connect to the running backend API to fetch predictions.
+-   **How to Run**: Follow the same steps to start the backend API as for the dashboard, but open the `index.html` file in your browser instead of `dashboard.html`.
