@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
         loadDataBtn.disabled = true;
         loadDataBtn.textContent = 'Loading...';
         summaryCardsContainer.innerHTML = '';
-        appointmentTableBody.innerHTML = '<tr><td colspan="7">Loading appointments...</td></tr>';
+        appointmentTableBody.innerHTML = '<tr><td colspan="6">Loading appointments...</td></tr>';
 
         try {
             const response = await fetch(`http://127.0.0.1:8000/get_appointments_by_date/?date=${date}`);
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.error('Error fetching data:', error);
             summaryCardsContainer.innerHTML = '<p>Could not load summary data.</p>';
-            appointmentTableBody.innerHTML = `<tr><td colspan="7">Error: ${error.message}</td></tr>`;
+            appointmentTableBody.innerHTML = `<tr><td colspan="6">Error: ${error.message}</td></tr>`;
         } finally {
             // Restore button state
             loadDataBtn.disabled = false;
@@ -59,16 +59,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 <h3>No-Show Rate</h3>
                 <p>${summary.noshow_rate}%</p>
             </div>
-            <div class="card">
-                <h3>Top Risk Factors</h3>
-                <p style="font-size: 1.2rem;">${summary.top_risk_factors}</p>
-            </div>
         `;
     }
 
     function updateAppointmentTable(appointments) {
         if (appointments.length === 0) {
-            appointmentTableBody.innerHTML = '<tr><td colspan="7">No appointments found for this date.</td></tr>';
+            appointmentTableBody.innerHTML = '<tr><td colspan="6">No appointments found for this date.</td></tr>';
             return;
         }
 
@@ -81,12 +77,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             row.innerHTML = `
                 <td>${appt.id}</td>
-                <td>${appt.patient_name}</td>
+                <td>${appt.patient_id}</td>
                 <td>${appt.time}</td>
                 <td>${appt.reason}</td>
-                <td>${appt.risk_factors}</td>
+                <td>${(appt.probability_score * 100).toFixed(2)}%</td>
                 <td class="${predictionClass}">${appt.prediction}</td>
-                <td>${appt.action}</td>
             `;
             appointmentTableBody.appendChild(row);
         });

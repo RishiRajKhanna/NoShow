@@ -46,21 +46,7 @@ app.add_middleware(
     allow_headers=["*"],   # Allows all headers
 )
 
-# --- 3. IMAGINary NAMES ---
-# Create a mapping for patient IDs to imaginary names
-patient_names = {
-    "3134695-943": "John Doe",
-    "47567-52227": "Jane Smith",
-    "17239-1359": "Peter Jones",
-    "22982-1359": "Mary Williams",
-    "23399-1359": "David Brown",
-    "12286-1359": "Susan Miller",
-    "9718-1359": "Robert Davis",
-    "1684-93989": "Patricia Garcia",
-    "default": "Patient"
-}
 
-# --- 4. API ENDPOINTS ---
 
 @app.get("/")
 def read_root():
@@ -146,12 +132,11 @@ def get_appointments_by_date(date: str):
 
         appointments_list.append({
             "id": row['APPOINTMENT_ODU_ID'],
-            "patient_name": patient_names.get(row['PATIENT_ODU_ID'], patient_names["default"]),
+            "patient_id": row['PATIENT_ODU_ID'],
             "time": row['APPOINTMENT_DATETIME'].strftime("%I:%M %p"),
             "reason": row['APPOINTMENT_TYPE'],
-            "risk_factors": ", ".join(risk_factors) if risk_factors else "None",
-            "prediction": risk_level,
-            "action": "📞" if risk_level == "High Risk" else ("✉️" if risk_level == "Medium Risk" else "✅")
+            "probability_score": row['NO_SHOW_PROBABILITY'],
+            "prediction": risk_level
         })
 
     # --- Calculate Summary ---
@@ -166,8 +151,7 @@ def get_appointments_by_date(date: str):
     summary = {
         "total_appointments": total_appointments,
         "predicted_noshows": high_risk_count,
-        "noshow_rate": round(noshow_rate, 1),
-        "top_risk_factors": top_risk_factors
+        "noshow_rate": round(noshow_rate, 1)
     }
 
     return {
